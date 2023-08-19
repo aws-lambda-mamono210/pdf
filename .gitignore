@@ -1,0 +1,15 @@
+# Python artifacts
+*.pyc
+*.pyo
+*.egg-info/
+__pycache__/
+
+# Virtual environment
+venv/
+*.venv
+env/
+
+# IDE settings
+.idea/
+*.swp
+*.swo
