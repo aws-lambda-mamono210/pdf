@@ -4,6 +4,9 @@
 *.egg-info/
 __pycache__/
 
+# Test artifacts
+artifacts/*
+
 # Virtual environment
 venv/
 *.venv
