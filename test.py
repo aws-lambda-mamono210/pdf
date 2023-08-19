@@ -5,6 +5,7 @@ import tempfile
 from PyPDF2 import PdfWriter
 from PyPDF2 import PdfReader
 from pdf_merger import merge_pdfs_in_directory  # この関数は先ほどのスクリプトからインポートします。
+from pdf_utils import create_pdf_with_text
 
 class TestPDFMerger(unittest.TestCase):
 
@@ -22,10 +23,8 @@ class TestPDFMerger(unittest.TestCase):
 
         # サンプルのPDFファイルを3つ作成
         for i in range(3):
-            writer = PdfWriter()
-            with open(os.path.join(self.test_dir, f"{i+1:02}_test.pdf"), "wb") as f:
-                writer.add_blank_page(width=100, height=100)
-                writer.write(f)
+            file_path = os.path.join(self.test_dir, f"{i+1:02}_test.pdf")
+            create_pdf_with_text(f"Page {i+1}", file_path)
 
     def tearDown(self):
         # テストが終わったら、テスト用のPDFファイルを'artifacts'ディレクトリに移動
