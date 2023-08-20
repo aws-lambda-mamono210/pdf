@@ -2,12 +2,34 @@
 version: 2.1
 
 executors:
+  python3:
+    docker:
+      - image: cimg/python:3.11
+    resource_class: small
   trailing-whitespace:
     docker:
       - image: ghcr.io/docker-images-mamono210/circleci-executors/trailing-whitespace:latest
     resource_class: small
 
 jobs:
+  build:
+    executor: python3
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            python -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+      - run:
+          name: Run tests
+          command: |
+            . venv/bin/activate
+            python test.py
+      - store_artifacts:
+          path: artifacts/
+          destination: test_artifacts
   trailing-whitespace:
     executor: trailing-whitespace
     steps:
@@ -18,6 +40,9 @@ jobs:
 
 workflows:
   version: 2.1
-  build:
+  builds:
     jobs:
       - trailing-whitespace
+      - build:
+          requires:
+            - trailing-whitespace
