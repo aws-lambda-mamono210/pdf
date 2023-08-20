@@ -1,0 +1,23 @@
+---
+version: 2.1
+
+executors:
+  trailing-whitespace:
+    docker:
+      - image: ghcr.io/docker-images-mamono210/circleci-executors/trailing-whitespace:latest
+    resource_class: small
+
+jobs:
+  trailing-whitespace:
+    executor: trailing-whitespace
+    steps:
+      - checkout
+      - run:
+          name: Execute trailing-whitespace
+          command: trailing-whitespace
+
+workflows:
+  version: 2.1
+  build:
+    jobs:
+      - trailing-whitespace
