@@ -27,6 +27,7 @@ jobs:
           command: |
             . venv/bin/activate
             python test.py
+            python utils/s3_utils_test.py
       - store_artifacts:
           path: artifacts/
           destination: test_artifacts
