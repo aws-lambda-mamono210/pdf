@@ -1,11 +1,15 @@
 import shutil
 import unittest
+import sys
 import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import tempfile
 from PyPDF2 import PdfWriter
 from PyPDF2 import PdfReader
-from pdf_merger import merge_pdfs_in_directory  # この関数は先ほどのスクリプトからインポートします。
-from pdf_utils import create_pdf_with_text
+from common_modules.pdf_merger.pdf_merger import merge_pdfs_in_directory
+from common_modules.pdf_utils.pdf_utils import create_pdf_with_text
 
 class TestPDFMerger(unittest.TestCase):
 

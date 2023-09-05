@@ -6,6 +6,8 @@ __pycache__/
 
 # Test artifacts
 artifacts/*
+*/test.txt
+*/downloaded_test.txt
 
 # Virtual environment
 venv/
