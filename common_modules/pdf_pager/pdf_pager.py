@@ -1,4 +1,3 @@
-from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from PyPDF2 import PdfReader, PdfWriter
 import io
@@ -18,7 +17,7 @@ def add_page_numbers(input_path, output_path):
 
         # Create a new PDF in memory to draw the page number
         packet = io.BytesIO()
-        c = canvas.Canvas(packet, pagesize=A4)
+        c = canvas.Canvas(packet, pagesize=(page_width, page_height))
 
         # Draw the page number (the position can be adjusted as needed)
         c.drawCentredString(page_width / 2, 30, f"- {page_number + 1} -")
