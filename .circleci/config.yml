@@ -28,7 +28,7 @@ jobs:
             . venv/bin/activate
             python tests/test.py
             python common_modules/s3_utils/s3_utils_test.py
-            python common_modules/pdf_pager/pdf_pager_test.py
+            python common_modules/pdf_pager/tests/pdf_pager_test.py
       - store_artifacts:
           path: artifacts/
           destination: test_artifacts

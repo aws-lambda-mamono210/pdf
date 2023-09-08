@@ -2,7 +2,7 @@ from reportlab.pdfgen import canvas
 from PyPDF2 import PdfReader, PdfWriter
 import io
 
-def add_page_numbers(input_path, output_path):
+def add_page_numbers(input_path, output_path, font_size=12, font_name="Helvetica"):
     # Load the existing PDF
     reader = PdfReader(input_path)
     writer = PdfWriter()
@@ -19,6 +19,9 @@ def add_page_numbers(input_path, output_path):
         packet = io.BytesIO()
         c = canvas.Canvas(packet, pagesize=(page_width, page_height))
 
+        # Set the font name and size
+        c.setFont(font_name, font_size)
+
         # Draw the page number (the position can be adjusted as needed)
         c.drawCentredString(page_width / 2, 30, f"- {page_number + 1} -")
         c.save()
@@ -34,4 +37,3 @@ def add_page_numbers(input_path, output_path):
     # Save the new PDF
     with open(output_path, "wb") as f:
         writer.write(f)
-

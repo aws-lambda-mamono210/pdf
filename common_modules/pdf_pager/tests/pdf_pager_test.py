@@ -3,7 +3,7 @@ import unittest
 import sys
 import os
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
 
 import tempfile
 from PyPDF2 import PdfWriter
@@ -44,7 +44,7 @@ class TestPDFMerger(unittest.TestCase):
         output_file_with_pages = os.path.join(self.test_dir, "page_added.pdf")
 
         merge_pdfs_in_directory(self.test_dir, output_file)
-        add_page_numbers(output_file, output_file_with_pages)
+        add_page_numbers(output_file, output_file_with_pages, font_size=33)
 
         # 出力PDFを読み込みます
         reader = PdfReader(output_file_with_pages)
