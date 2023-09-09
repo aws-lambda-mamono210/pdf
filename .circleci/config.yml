@@ -11,11 +11,19 @@ executors:
       - image: ghcr.io/docker-images-mamono210/circleci-executors/trailing-whitespace:latest
     resource_class: small
 
+orbs:
+  aws-cli: circleci/aws-cli@3.1.1
+
 jobs:
   build:
     executor: python3
     steps:
       - checkout
+      - aws-cli/setup:
+          profile-name: default
+          role-arn: ${AWS_ROLE_ARN}
+          role-session-name: circleci-mamono210-aws-lambda-pdf
+          session-duration: '2100'
       - run:
           name: Install dependencies
           command: |
@@ -46,5 +54,6 @@ workflows:
     jobs:
       - trailing-whitespace
       - build:
+          context: aws-oidc
           requires:
             - trailing-whitespace
