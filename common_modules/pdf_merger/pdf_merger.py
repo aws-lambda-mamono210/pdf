@@ -8,11 +8,16 @@ def merge_pdfs_in_directory(directory, output_filename):
     all_files = os.listdir(directory)
 
     # 指定の命名規則に合致するファイルだけを抽出
-    pattern = re.compile(r'\d{2}_\w+\.pdf')
+    pattern = re.compile(r'\d{2}\s?.+\.pdf')
     matching_files = [f for f in all_files if pattern.match(f)]
 
+    # マッチしたファイルを表示
+    print("マッチしたファイル:")
+    for file in matching_files:
+        print(file)
+
     # ファイル名の数字部分（例：01, 02）でソート
-    sorted_files = sorted(matching_files, key=lambda x: int(x.split('_')[0]))
+    sorted_files = sorted(matching_files, key=lambda x: int(x[:2]))
 
     # ファイルのフルパスを取得
     full_paths = [os.path.join(directory, f) for f in sorted_files]

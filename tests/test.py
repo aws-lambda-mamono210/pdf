@@ -30,13 +30,13 @@ class TestHandler(unittest.TestCase):
             os.makedirs(self.output_directory)
 
         # Step 1: Create test files locally
-        create_pdf_with_text("Test Content for File 1", os.path.join(self.output_directory, 'test_file1.pdf'))
-        create_pdf_with_text("Test Content for File 2", os.path.join(self.output_directory, 'test_file2.pdf'))
+        create_pdf_with_text("Test Content for File 1", os.path.join(self.output_directory, '01 test_file1.pdf'))
+        create_pdf_with_text("Test Content for File 2", os.path.join(self.output_directory, '02 test_file2.pdf'))
 
         # Step 2: Upload test files to S3
         s3_client = boto3.client('s3')
-        s3_client.upload_file(os.path.join(self.output_directory, 'test_file1.pdf'), self.bucket_name, self.object_keys[0])
-        s3_client.upload_file(os.path.join(self.output_directory, 'test_file2.pdf'), self.bucket_name, self.object_keys[1])
+        s3_client.upload_file(os.path.join(self.output_directory, '01 test_file1.pdf'), self.bucket_name, self.object_keys[0])
+        s3_client.upload_file(os.path.join(self.output_directory, '02 test_file2.pdf'), self.bucket_name, self.object_keys[1])
 
     def test_handler(self):
         # Test the handler function
