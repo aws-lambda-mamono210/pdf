@@ -18,11 +18,13 @@ class TestHandler(unittest.TestCase):
     def setUp(self):
         # Setup necessary variables for the tests
         self.bucket_name = 'mamono210'
-        self.object_keys = ['aws/lambda/pdf/test_file1.pdf', 'aws/lambda/pdf/test_file2.pdf']  # Replace with your test file names
         self.output_directory = 'test_downloaded_files'
         self.output_filename = 'test_output_with_page_numbers.pdf'
         self.merged_filename = 'test_merged_output.pdf'
         self.s3_object_name = 'aws/lambda/pdf/test_merged_output.pdf'
+
+        # 10個のキーを生成します
+        self.object_keys = [f'aws/lambda/pdf/test_file{i}.pdf' for i in range(1, 11)]
 
         os.makedirs(os.path.join(self.output_directory, 'aws/lambda/pdf'), exist_ok=True)
 
@@ -30,14 +32,19 @@ class TestHandler(unittest.TestCase):
         if not os.path.exists(self.output_directory):
             os.makedirs(self.output_directory)
 
-        # Step 1: Create test files locally
-        create_pdf_with_text("Test Content for File 1", os.path.join(self.output_directory, '01 test_file1.pdf'))
-        create_pdf_with_text("Test Content for File 2", os.path.join(self.output_directory, '02 test_file2.pdf'))
-
-        # Step 2: Upload test files to S3
         s3_client = boto3.client('s3')
-        s3_client.upload_file(os.path.join(self.output_directory, '01 test_file1.pdf'), self.bucket_name, self.object_keys[0])
-        s3_client.upload_file(os.path.join(self.output_directory, '02 test_file2.pdf'), self.bucket_name, self.object_keys[1])
+
+        # Step 1 and Step 2: Create test files locally and Upload them to S3
+        for i in range(1, 11):
+            file_name = f"{str(i).zfill(2)} test_file{i}.pdf"
+            file_path = os.path.join(self.output_directory, file_name)
+
+            # Step 1: Create test files locally
+            create_pdf_with_text(f"Test Content for File {i}", file_path)
+
+            # Step 2: Upload test files to S3
+            s3_client.upload_file(file_path, self.bucket_name, self.object_keys[i - 1])
+
 
     def test_handler(self):
         # Test the handler function
