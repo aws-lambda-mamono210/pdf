@@ -22,6 +22,7 @@ class TestHandler(unittest.TestCase):
         self.output_directory = 'test_downloaded_files'
         self.output_filename = 'test_output_with_page_numbers.pdf'
         self.merged_filename = 'test_merged_output.pdf'
+        self.s3_object_name = 'aws/lambda/pdf/test_merged_output.pdf'
 
         os.makedirs(os.path.join(self.output_directory, 'aws/lambda/pdf'), exist_ok=True)
 
@@ -40,7 +41,7 @@ class TestHandler(unittest.TestCase):
 
     def test_handler(self):
         # Test the handler function
-        handler(self.bucket_name, self.object_keys, self.output_directory, self.output_filename, self.merged_filename)
+        handler(self.bucket_name, self.object_keys, self.output_directory, self.output_filename, self.merged_filename, self.s3_object_name)
 
         # Check if the output file is created
         self.assertTrue(os.path.exists(self.output_filename))

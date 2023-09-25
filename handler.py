@@ -3,7 +3,7 @@ from common_modules.pdf_merger.pdf_merger import merge_pdfs_in_directory
 from common_modules.pdf_pager.pdf_pager import add_page_numbers
 from common_modules.s3_utils.s3_utils import S3Utils
 
-def handler(bucket_name, object_keys, output_directory, output_filename, merged_filename):
+def handler(bucket_name, object_keys, output_directory, output_filename, merged_filename, s3_object_name):
     # Step 1: Initialize the S3 client
     s3_client = S3Utils(bucket_name)
 
@@ -22,6 +22,6 @@ def handler(bucket_name, object_keys, output_directory, output_filename, merged_
     add_page_numbers(merged_filename, output_filename)
 
     # Step 5: Upload the merged file to S3
-    s3_client.upload_file(output_filename, output_filename)
+    s3_client.upload_file(output_filename, s3_object_name)
 
     print("Process completed successfully!")
