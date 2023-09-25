@@ -59,15 +59,20 @@ class TestHandler(unittest.TestCase):
         # Additional assertions can be added here to verify the content of the output files
 
     def tearDown(self):
-        # Clean up files created during the test
+        save_dir = "artifacts"
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+
         if os.path.exists(self.output_filename):
-            os.remove(self.output_filename)
+            # Move the output file to the 'artifacts' directory
+            shutil.move(self.output_filename, os.path.join(save_dir, self.output_filename))
 
         if os.path.exists(self.merged_filename):
-            os.remove(self.merged_filename)
+            # Move the merged file to the 'artifacts' directory
+            shutil.move(self.merged_filename, os.path.join(save_dir, self.merged_filename))
 
         if os.path.exists(self.output_directory):
-           shutil.rmtree(self.output_directory)
+            shutil.rmtree(self.output_directory)
 
 if __name__ == '__main__':
     unittest.main()
