@@ -32,7 +32,7 @@ class TestHandler(unittest.TestCase):
         if not os.path.exists(self.download_directory):
             os.makedirs(self.download_directory)
 
-        self.object_keys = [f'test_file{i}.pdf' for i in range(1, 11)]
+        self.object_keys = [f'aws/lambda/pdf/test_file{i}.pdf' for i in range(1, 11)]
 
         print("Create test files.")
         for i in range(1, 11):
@@ -45,7 +45,7 @@ class TestHandler(unittest.TestCase):
 
             # Step 2: Upload test files to S3
             s3_client.upload_file(file_path, self.bucket_name, self.object_keys[i - 1])
-            print(f"{file_path} is uploaded {self.bucket_name}/aws/lambda/pdf/{self.object_keys[i - 1]}\n")
+            print(f"{file_path} is uploaded {self.bucket_name}/{self.object_keys[i - 1]}\n")
 
         print("Setup process succeeded.\n\n\n")
 
