@@ -16,39 +16,43 @@ from handler import handler
 class TestHandler(unittest.TestCase):
 
     def setUp(self):
+        print("Setup Proccess")
         # Setup necessary variables for the tests
         self.bucket_name = 'mamono210'
-        self.output_directory = 'test_downloaded_files'
+        self.download_directory = 'test_downloaded_files'
         self.output_filename = 'test_output_with_page_numbers.pdf'
         self.merged_filename = 'test_merged_output.pdf'
         self.s3_object_name = 'aws/lambda/pdf/test_merged_output.pdf'
 
-        # 10個のキーを生成します
-        self.object_keys = [f'aws/lambda/pdf/test_file{i}.pdf' for i in range(1, 11)]
-
-        os.makedirs(os.path.join(self.output_directory, 'aws/lambda/pdf'), exist_ok=True)
-
-        # Create test PDF files
-        if not os.path.exists(self.output_directory):
-            os.makedirs(self.output_directory)
-
+        # Step 1 and Step 2: Create test files locally and Upload them to S3
+        print("Initialize S3 client.")
         s3_client = boto3.client('s3')
 
-        # Step 1 and Step 2: Create test files locally and Upload them to S3
+        print("Create test file directory.")
+        if not os.path.exists(self.download_directory):
+            os.makedirs(self.download_directory)
+
+        self.object_keys = [f'test_file{i}.pdf' for i in range(1, 11)]
+
+        print("Create test files.")
         for i in range(1, 11):
             file_name = f"{str(i).zfill(2)} test_file{i}.pdf"
-            file_path = os.path.join(self.output_directory, file_name)
+            file_path = os.path.join(self.download_directory, file_name)
 
             # Step 1: Create test files locally
             create_pdf_with_text(f"Test Content for File {i}", file_path)
+            print(f"{file_name} is created in {file_path}.")
 
             # Step 2: Upload test files to S3
             s3_client.upload_file(file_path, self.bucket_name, self.object_keys[i - 1])
+            print(f"{file_path} is uploaded {self.bucket_name}/aws/lambda/pdf/{self.object_keys[i - 1]}\n")
+
+        print("Setup process succeeded.\n\n\n")
 
 
     def test_handler(self):
         # Test the handler function
-        handler(self.bucket_name, self.object_keys, self.output_directory, self.output_filename, self.merged_filename, self.s3_object_name)
+        handler(self.bucket_name, self.object_keys, self.download_directory, self.output_filename, self.merged_filename, self.s3_object_name)
 
         # Check if the output file is created
         self.assertTrue(os.path.exists(self.output_filename))
@@ -71,8 +75,8 @@ class TestHandler(unittest.TestCase):
             # Move the merged file to the 'artifacts' directory
             shutil.move(self.merged_filename, os.path.join(save_dir, self.merged_filename))
 
-        if os.path.exists(self.output_directory):
-            shutil.rmtree(self.output_directory)
+        if os.path.exists(self.download_directory):
+            shutil.rmtree(self.download_directory)
 
 if __name__ == '__main__':
     unittest.main()

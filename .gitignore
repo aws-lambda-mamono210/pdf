@@ -9,6 +9,8 @@ artifacts/*
 common_modules/pdf_pager/tests/artifacts/*
 */test.txt
 */downloaded_test.txt
+test.txt
+downloaded_test.txt
 
 # Virtual environment
 venv/
