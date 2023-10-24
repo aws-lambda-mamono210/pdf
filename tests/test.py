@@ -22,7 +22,7 @@ class TestHandler(unittest.TestCase):
         self.download_directory = 'test_downloaded_files'
         self.output_filename = 'test_output_with_page_numbers.pdf'
         self.merged_filename = 'test_merged_output.pdf'
-        self.s3_object_name = 'aws/lambda/pdf/test_merged_output.pdf'
+        self.s3_object_name = 'aws/lambda/pdf/tests/test_merged_output.pdf'
 
         # Step 1 and Step 2: Create test files locally and Upload them to S3
         print("Initialize S3 client.")
@@ -38,7 +38,7 @@ class TestHandler(unittest.TestCase):
         for i in range(1, 11):
             file_name = f"{str(i).zfill(2)} test_file{i}.pdf"
             file_path = os.path.join(self.download_directory, file_name)
-            s3_object = f"aws/lambda/pdf/{file_name}"
+            s3_object = f"aws/lambda/pdf/tests/{file_name}"
 
             # Step 1: Create test files locally
             create_pdf_with_text(f"Test Content for File {i}", file_path)
