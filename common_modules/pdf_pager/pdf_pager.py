@@ -12,8 +12,8 @@ def add_page_numbers(input_path, output_path, font_size=12, font_name="Helvetica
         page = reader.pages[page_number]
 
         # Get the page size
-        page_width = page.mediabox[2]
-        page_height = page.mediabox[3]
+        page_width = float(page.mediabox[2])
+        page_height = float(page.mediabox[3])
 
         # Create a new PDF in memory to draw the page number
         packet = io.BytesIO()

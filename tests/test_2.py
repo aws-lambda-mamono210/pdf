@@ -19,43 +19,18 @@ class TestHandler(unittest.TestCase):
         print("Setup Proccess")
         # Setup necessary variables for the tests
         self.bucket_name = 'mamono210'
-        self.download_directory = 'test_downloaded_files'
-        self.output_filename = 'test_output_with_page_numbers.pdf'
-        self.merged_filename = 'test_merged_output.pdf'
-        self.s3_object_name = 'aws/lambda/pdf/tests/test_merged_output.pdf'
-
-        # Step 1 and Step 2: Create test files locally and Upload them to S3
-        print("Initialize S3 client.")
-        s3_client = boto3.client('s3')
-
-        print("Create test file directory.")
-        if not os.path.exists(self.download_directory):
-            os.makedirs(self.download_directory)
-
-        self.object_keys = []
-
-        print("Create test files.")
-        for i in range(1, 11):
-            file_name = f"{str(i).zfill(2)} test_file{i}.pdf"
-            file_path = os.path.join(self.download_directory, file_name)
-            s3_object = f"aws/lambda/pdf/tests/{file_name}"
-
-            # Step 1: Create test files locally
-            create_pdf_with_text(f"Test Content for File {i}", file_path)
-            print(f"{file_name} is created in {file_path}.")
-
-            # Step 2: Upload test files to S3
-            s3_client.upload_file(file_path, self.bucket_name, s3_object)
-            print(f"{file_path} is uploaded {self.bucket_name}/{s3_object}\n")
-
-            # Step 3: Update object_keys
-            self.object_keys.append(s3_object)
-
-        print("Delete test files.")
-        if os.path.exists(self.download_directory):
-            shutil.rmtree(self.download_directory)
-
-        print("Setup process succeeded.\n\n\n")
+        self.object_keys = [
+          "aws/lambda/pdf/tests/2/01 資料.pdf",
+          "aws/lambda/pdf/tests/2/02 座光寺下段整備地区用排水路管理組合.pdf",
+          "aws/lambda/pdf/tests/2/03 2023(R5)年度 役員.pdf",
+          "aws/lambda/pdf/tests/2/04 下段整備 工事個所.pdf",
+          "aws/lambda/pdf/tests/2/05 黒沢川取水口他整備履歴.pdf",
+          "aws/lambda/pdf/tests/2/06-参考資料.pdf"
+        ]
+        self.download_directory = 'test_2_downloaded_files'
+        self.output_filename = 'test_2_output_with_page_numbers.pdf'
+        self.merged_filename = 'test_2_merged_output.pdf'
+        self.s3_object_name = 'aws/lambda/pdf/tests/2/test_2_merged_output.pdf'
 
 
     def test_handler(self):
