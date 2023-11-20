@@ -19,6 +19,8 @@ class TestHandler(unittest.TestCase):
         print("Setup Proccess")
         # Setup necessary variables for the tests
         self.bucket_name = 'mamono210'
+        self.s3_folder_name = 'aws/lambda/pdf/tests/1/'
+        self.region_name = 'ap-northeast-1'
         self.download_directory = 'test_1_downloaded_files'
         self.output_filename = 'test_1_output_with_page_numbers.pdf'
         self.merged_filename = 'test_1_merged_output.pdf'
@@ -32,10 +34,8 @@ class TestHandler(unittest.TestCase):
         if not os.path.exists(self.download_directory):
             os.makedirs(self.download_directory)
 
-        self.object_keys = []
-
         print("Create test files.")
-        for i in range(1, 11):
+        for i in range(1, 6):
             file_name = f"{str(i).zfill(2)} test_file{i}.pdf"
             file_path = os.path.join(self.download_directory, file_name)
             s3_object = f"aws/lambda/pdf/tests/1/{file_name}"
@@ -48,9 +48,6 @@ class TestHandler(unittest.TestCase):
             s3_client.upload_file(file_path, self.bucket_name, s3_object)
             print(f"{file_path} is uploaded {self.bucket_name}/{s3_object}\n")
 
-            # Step 3: Update object_keys
-            self.object_keys.append(s3_object)
-
         print("Delete test files.")
         if os.path.exists(self.download_directory):
             shutil.rmtree(self.download_directory)
@@ -60,7 +57,7 @@ class TestHandler(unittest.TestCase):
 
     def test_handler(self):
         # Test the handler function
-        handler(self.bucket_name, self.object_keys, self.download_directory, self.output_filename, self.merged_filename, self.s3_object_name)
+        handler(self.bucket_name, self.s3_folder_name, self.region_name, self.download_directory, self.output_filename, self.merged_filename, self.s3_object_name)
 
         # Check if the output file is created
         self.assertTrue(os.path.exists(self.output_filename))

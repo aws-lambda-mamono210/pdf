@@ -19,14 +19,8 @@ class TestHandler(unittest.TestCase):
         print("Setup Proccess")
         # Setup necessary variables for the tests
         self.bucket_name = 'mamono210'
-        self.object_keys = [
-          "aws/lambda/pdf/tests/2/01 資料.pdf",
-          "aws/lambda/pdf/tests/2/02 座光寺下段整備地区用排水路管理組合.pdf",
-          "aws/lambda/pdf/tests/2/03 2023(R5)年度 役員.pdf",
-          "aws/lambda/pdf/tests/2/04 下段整備 工事個所.pdf",
-          "aws/lambda/pdf/tests/2/05 黒沢川取水口他整備履歴.pdf",
-          "aws/lambda/pdf/tests/2/06-参考資料.pdf"
-        ]
+        self.s3_folder_name = 'aws/lambda/pdf/tests/2/'
+        self.region_name = 'ap-northeast-1'
         self.download_directory = 'test_2_downloaded_files'
         self.output_filename = 'test_2_output_with_page_numbers.pdf'
         self.merged_filename = 'test_2_merged_output.pdf'
@@ -35,7 +29,7 @@ class TestHandler(unittest.TestCase):
 
     def test_handler(self):
         # Test the handler function
-        handler(self.bucket_name, self.object_keys, self.download_directory, self.output_filename, self.merged_filename, self.s3_object_name)
+        handler(self.bucket_name, self.s3_folder_name, self.region_name, self.download_directory, self.output_filename, self.merged_filename, self.s3_object_name)
 
         # Check if the output file is created
         self.assertTrue(os.path.exists(self.output_filename))

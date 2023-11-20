@@ -1,13 +1,18 @@
+import boto3
 import os
+import re
 from pathlib import Path
 from common_modules.pdf_merger.pdf_merger import merge_pdfs_in_directory
 from common_modules.pdf_pager.pdf_pager import add_page_numbers
 from common_modules.s3_utils.s3_utils import S3Utils
 
-def handler(bucket_name, object_keys, download_directory, output_filename, merged_filename, s3_object_name):
+def handler(bucket_name, s3_folder_name, region_name, download_directory, output_filename, merged_filename, s3_object_name):
     # Step 1: Initialize the S3 client
     print("Step 1: Initialize the S3 client.")
-    s3_client = S3Utils(bucket_name)
+    s3 = s3 = boto3.client(
+        's3',
+        region_name=region_name
+    )
 
     # Step 2: Download the objects
     print("Step 2: Download the objects.\n")
@@ -16,11 +21,20 @@ def handler(bucket_name, object_keys, download_directory, output_filename, merge
         os.makedirs(download_directory)
     print(f"Create {download_directory}.")
 
-    for object_key in object_keys:
-        object_path  = Path(object_key)
-        destination_path = os.path.join(download_directory, object_path.name)
-        s3_client.download_file(object_key, destination_path)
-        print(f"Download {object_key} in {destination_path}.")
+    # List files in a specific folder
+    response = s3.list_objects_v2(Bucket=bucket_name, Prefix=s3_folder_name)
+
+    # Download files that match the pattern
+    pattern = r'^\d{2}.*\.pdf$'
+
+    if 'Contents' in response:
+        for file in response['Contents']:
+            file_name = file['Key']
+            local_file_name = file_name.split('/')[-1]  # Set the local file name
+            if re.match(pattern, local_file_name):
+                destination_path = os.path.join(download_directory, local_file_name)
+                s3.download_file(bucket_name, file_name, destination_path)
+                print(f'Downloaded {file_name} to {destination_path}')
 
     print("Download completed.\n")
 
@@ -34,6 +48,6 @@ def handler(bucket_name, object_keys, download_directory, output_filename, merge
 
     # Step 5: Upload the merged file to S3
     print("Step 5: Upload the merged file to S3.")
-    s3_client.upload_file(output_filename, s3_object_name)
+    s3.upload_file(output_filename, bucket_name, s3_object_name)
 
     print("Process completed successfully!")
