@@ -4,7 +4,6 @@ import re
 from pathlib import Path
 from common_modules.pdf_merger.pdf_merger import merge_pdfs_in_directory
 from common_modules.pdf_pager.pdf_pager import add_page_numbers
-from common_modules.s3_utils.s3_utils import S3Utils
 
 def handler(bucket_name, s3_folder_name, region_name, download_directory, output_filename, merged_filename, s3_object_name):
     # Step 1: Initialize the S3 client
